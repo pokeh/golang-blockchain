@@ -30,6 +30,7 @@ func Genesis() *Block {
 
 func (b *Block) Serialize() []byte {
 	var res bytes.Buffer
+	// gob: binary values exchanged between an Encoder and a Decoder
 	encoder := gob.NewEncoder(&res)
 
 	err := encoder.Encode(b)
