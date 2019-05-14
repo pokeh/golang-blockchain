@@ -1,0 +1,5 @@
+# the executable
+golang-blockchain
+
+# data
+tmp/blocks/*
