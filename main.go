@@ -129,10 +129,10 @@ func (cli *CommandLine) run() {
 
 	if createBlockchainCmd.Parsed() {
 		if *createBlockchainAddress == "" {
-			getBalanceCmd.Usage()
+			createBlockchainCmd.Usage()
 			runtime.Goexit()
 		}
-		cli.getBalance(*createBlockchainAddress)
+		cli.createBlockChain(*createBlockchainAddress)
 	}
 
 	if printChainCmd.Parsed() {

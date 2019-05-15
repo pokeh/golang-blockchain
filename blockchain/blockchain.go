@@ -11,7 +11,7 @@ import (
 
 const (
 	dbPath      = "./tmp/blocks"
-	dbFile      = "./tmp/MANIFEST"
+	dbFile      = "./tmp/blocks/MANIFEST"
 	genesisData = "First Transaction from Genesis"
 )
 
@@ -56,7 +56,7 @@ func InitBlockChain(address string) *BlockChain {
 		fmt.Println("Genesis created")
 		err = txn.Set(genesis.Hash, genesis.Serialize())
 		Handle(err)
-		err = txn.Set([]byte("1h"), genesis.Hash)
+		err = txn.Set([]byte("lh"), genesis.Hash)
 
 		lastHash = genesis.Hash
 
@@ -70,7 +70,7 @@ func InitBlockChain(address string) *BlockChain {
 
 func ContinueBlockChain(address string) *BlockChain {
 	if DBExists() == false {
-		fmt.Println("No existin blockchain found, create one!")
+		fmt.Println("No existing blockchain found, create one!")
 		runtime.Goexit()
 	}
 
@@ -83,7 +83,7 @@ func ContinueBlockChain(address string) *BlockChain {
 	Handle(err)
 
 	err = db.Update(func(txn *badger.Txn) error {
-		item, err := txn.Get([]byte("1h"))
+		item, err := txn.Get([]byte("lh"))
 		Handle(err)
 		lastHash, err = item.Value()
 
@@ -175,7 +175,7 @@ func (chain *BlockChain) FindUnspentTransactions(address string) []Transaction {
 				for _, in := range tx.Inputs {
 					if in.CanUnlock(address) {
 						inTxID := hex.EncodeToString(in.ID)
-						spentTXOs[inTxID] = append(spentTXOs[inTxID])
+						spentTXOs[inTxID] = append(spentTXOs[inTxID], in.Out)
 					}
 				}
 			}
