@@ -15,18 +15,6 @@ type Transaction struct {
 	Outputs []TxOutput
 }
 
-type TxOutput struct {
-	Value  int
-	PubKey string // for now we just put the account name. usually use a script
-}
-
-// references to previous outputs
-type TxInput struct {
-	ID  []byte //transaction that the output is inside of
-	Out int    //index of the output in the transaction
-	Sig string // pubkey
-}
-
 func (tx *Transaction) SetID() {
 	var encoded bytes.Buffer
 	var hash [32]byte
@@ -88,14 +76,4 @@ func NewTransaction(from, to string, amount int, chain *BlockChain) *Transaction
 func (tx *Transaction) IsCoinbase() bool {
 	// because 	txin := TxInput{[]byte{}, -1, data}
 	return len(tx.Inputs) == 1 && len(tx.Inputs[0].ID) == 0 && tx.Inputs[0].Out == -1
-}
-
-func (in *TxInput) CanUnlock(data string) bool {
-	// if this is true, the account (data) owns the information in the output referenfed in the input
-	return in.Sig == data
-}
-
-func (out *TxOutput) CanBeUnlocked(data string) bool {
-	// if this is true, the account (data) owns the information in the output
-	return out.PubKey == data
 }
