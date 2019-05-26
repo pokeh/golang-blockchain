@@ -276,7 +276,7 @@ func HandleTx(request []byte, chain *blockchain.BlockChain) {
 	var buff bytes.Buffer
 	var payload Tx
 
-	buff.Write(requets[commandLength:])
+	buff.Write(request[commandLength:])
 	dec := gob.NewDecoder(&buff)
 	err := dec.Decode(&payload)
 	if err != nil {
