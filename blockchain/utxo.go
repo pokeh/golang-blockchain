@@ -8,10 +8,7 @@ import (
 	"github.com/dgraph-io/badger"
 )
 
-var (
-	utxoPrefix   = []byte("utxo-")
-	prefixLength = len(utxoPrefix)
-)
+var utxoPrefix = []byte("utxo-")
 
 type UTXOSet struct {
 	Blockchain *BlockChain
@@ -131,7 +128,7 @@ func (u *UTXOSet) Update(block *Block) {
 
 	err := db.Update(func(txn *badger.Txn) error {
 		for _, tx := range block.Transactions {
-			if tx.IsCoinbase() == false {
+			if !tx.IsCoinbase() {
 				for _, in := range tx.Inputs {
 					updatedOuts := TxOutputs{}
 					inID := append(utxoPrefix, in.ID...)
@@ -190,7 +187,7 @@ func (u *UTXOSet) DeleteByPrefix(prefix []byte) {
 	}
 
 	collectSize := 100000
-	u.Blockchain.Database.View(func(txn *badger.Txn) error {
+	err := u.Blockchain.Database.View(func(txn *badger.Txn) error {
 		opts := badger.DefaultIteratorOptions
 		opts.PrefetchValues = false
 		it := txn.NewIterator(opts)
@@ -217,4 +214,7 @@ func (u *UTXOSet) DeleteByPrefix(prefix []byte) {
 		}
 		return nil
 	})
+	if err != nil {
+		log.Panic(err)
+	}
 }
