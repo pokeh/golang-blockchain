@@ -3,7 +3,6 @@ package blockchain
 import (
 	"bytes"
 	"encoding/gob"
-	"log"
 	"time"
 )
 
@@ -25,7 +24,7 @@ func (b *Block) HashTransactions() []byte {
 	}
 	tree := NewMerkleTree(txHashes)
 
-	// TODO: why the root?
+	// rootnode has the final hash of all the transactions combined
 	return tree.RootNode.Data
 }
 
@@ -66,10 +65,4 @@ func Deserialize(data []byte) *Block {
 	Handle(err)
 
 	return &block
-}
-
-func Handle(err error) {
-	if err != nil {
-		log.Panic(err)
-	}
 }

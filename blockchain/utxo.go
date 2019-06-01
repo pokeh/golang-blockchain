@@ -10,6 +10,9 @@ import (
 
 var utxoPrefix = []byte("utxo-")
 
+// UTXO = unspent transaction output
+// These outputs are not referenced by any inputs
+// ie. These tokens still exist and should be counted towards the balance
 type UTXOSet struct {
 	Blockchain *BlockChain
 }

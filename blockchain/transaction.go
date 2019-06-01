@@ -63,7 +63,7 @@ func CoinbaseTx(to, data string) *Transaction {
 	}
 
 	txin := TxInput{[]byte{}, -1, nil, []byte(data)}
-	txout := NewTXOutput(20, to) //100 is the reward for mining
+	txout := NewTXOutput(20, to) // this is the reward for mining
 
 	tx := Transaction{nil, []TxInput{txin}, []TxOutput{*txout}}
 	tx.ID = tx.Hash()
